@@ -1,0 +1,15 @@
+{
+  "date_columns": ["created", "resolutiondate", "updated", "investigated",
+    "closuredate"],
+  "columns": {
+    "customfield_10002": "severity",
+    "customfield_10232": "investigated",
+    "customfield_10350": "closuredate"
+  },
+  "closed_states": ["Closed", "Done", "Released"],
+  "issue_type": {
+    "defect": ["hardware defect", "software defect", "mechanical defect",
+      "problem", "documentation defect", "optical defect", "process defect"],
+    "change": ["story", "requirement", "new feature", "improvement"]
+  }
+}
