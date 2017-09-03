@@ -42,8 +42,8 @@ def _busday(obj, start, end=None, today=dt.today().date()):
 CONVERTERS = dict(
     assignee=compose(_get_name, str.upper),
     summary=ident,
-    status=_get_name,
-    issueType=_get_name,
+    status=compose(_get_name, str.lower),
+    issuetype=compose(_get_name, str.lower),
     project=_get_name,
     priority=compose(_get_name, splitstr, fst),
     customfield_10002=compose(_get_value, splitstr, fst),
@@ -72,8 +72,8 @@ def parse_itrack_issue(issue):
 
     # add metadata
     data['closed'] = data.get('status', None) in _CLOSED_STATES
-    data['defect'] = data.get('issueType', None) in _DEFECT_TYPES
-    data['change'] = data.get('issueType', None) in _CHANGE_TYPES
+    data['defect'] = data.get('issuetype', None) in _DEFECT_TYPES
+    data['change'] = data.get('issuetype', None) in _CHANGE_TYPES
     data['age'] = _busday(data, 'created', 'customfield_10350')
     data['idle'] = _busday(data, 'updated')
 
