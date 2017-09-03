@@ -3,9 +3,11 @@ from setuptools import setup
 
 setup(
     name='pybarco',
-    version='0.0.3',
+    version='0.0.4',
     packages=[
-        'barco', 'barco.itrack', 'barco.utils'
+        'barco',
+        'barco.sap', 'barco.sap.crm',
+        'barco.itrack', 'barco.utils'
     ],
     package_dir={'': 'src'},
     package_data={
