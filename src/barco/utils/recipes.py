@@ -78,3 +78,8 @@ def snake_case(string):
         '([a-z0-9])([A-Z])', r'\1_\2',
         re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
     ).lower()
+
+
+def bool2int(value):
+    """Returns the integer representation of a boolean `value`."""
+    return 1 if value else 0
