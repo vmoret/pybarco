@@ -1,5 +1,6 @@
 """Python recipes."""
-from functools import reduce, partial
+from datetime import datetime
+from functools import reduce, partial, wraps
 import re
 
 splitstr = partial(str.split, sep=' ')
@@ -83,3 +84,24 @@ def snake_case(string):
 def bool2int(value):
     """Returns the integer representation of a boolean `value`."""
     return 1 if value else 0
+
+
+def isempty(s):
+    """Returns true when `s` is empty else false."""
+    return str(s) == ''
+
+
+def when_empty(default):
+    """Returns `default` when result of `inner` is empty."""
+    def inner(s):
+        return default if isempty(s) else s
+    return inner
+
+
+def strpdate(s):
+    if isempty(s):
+        return pd.NaT
+    stripped = str(s).strip()
+    fmt = '%d.%m.%Y %H:%M:%S' if ' ' in stripped else '%d.%m.%Y'
+    dt = datetime.strptime(stripped, fmt)
+    return pd.NaT if dt.year == 1900 else dt

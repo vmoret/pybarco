@@ -1,5 +1,7 @@
 """Provides commonly used pandas related utility and decorator functions."""
+from datetime import datetime
 import functools
+import numpy as np
 import pandas as pd
 
 
@@ -85,3 +87,48 @@ def to_datetime(columns, **kws):
 
         return _wrapper
     return _decorator
+
+
+def categorize(columns):
+    """
+    Decorator factory that changes types of `columns` of result value
+    to pandas categories when result value is a pandas.DataFrame.
+
+    Parameters
+    ----------
+    columns -- list
+        Name of the columns to change type to category.
+    """
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            res = func(*args, **kwargs)
+            if isinstance(res, pd.DataFrame):
+                return res.assign(**{k: lambda df, k=k: pd.Categorical(df[k])
+                                     for k in columns})
+            return res
+        return wrapper
+    return decorator
+
+
+def busday_counter(start, end=None, default=datetime.today()):
+    """
+    Generates a busday counter for `start` and `end` date column that can be
+    applied to a pandas DataFrame.
+
+    Parameters
+    ----------
+    start, end -- str
+        column names of the pandas DataFrame
+    default -- datetime
+        The fallback date/time to be used when start or end columns are not
+        available in the pandas DataFrame.
+        Also used to replace NaN values in the end column.
+    """
+    def inner(df):
+        columns = df.columns.tolist()
+        return np.busday_count(
+            df[start].tolist() if start in columns else default,
+            df[end].fillna(default).tolist() if end in columns else default
+        )
+    return inner
