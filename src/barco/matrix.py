@@ -94,8 +94,9 @@ def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
         months = [max(x[1]) for x in groupby(reduce(reducer, [(1, x[2])
                   for x in days if x[0] == 0], []), itemgetter(1))]
 
-        svg = '<svg width="{width}" height="{height}"
-            class="js-calendar-graph-svg">'.format(width=width, height=height)
+        svg = ('<svg width="{width}" height="{height}" ' +
+               'class="js-calendar-graph-svg">').format(width=width,
+                                                        height=height)
         svg += '<g transform="translate(16, 20)">'
         for i, week in enumerate(weeks):
             svg += build_svg_week(i, week)
