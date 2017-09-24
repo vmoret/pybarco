@@ -3,6 +3,7 @@ from functools import reduce
 from itertools import groupby
 from operator import itemgetter
 
+import pandas as pd
 from IPython.display import display_html
 
 
