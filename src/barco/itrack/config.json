@@ -4,7 +4,8 @@
   "columns": {
     "customfield_10002": "severity",
     "customfield_10232": "investigated",
-    "customfield_10350": "closuredate"
+    "customfield_10350": "closuredate",
+    "customfield_10021": "observedduring"
   },
   "closed_states": ["Closed", "Done", "Released"],
   "issue_type": {

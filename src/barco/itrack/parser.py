@@ -47,6 +47,7 @@ CONVERTERS = dict(
     project=_get_name,
     priority=compose(_get_name, splitstr, fst),
     customfield_10002=compose(_get_value, splitstr, fst),
+    customfield_10021=_get_value,
     customfield_10232=_get_date,
     customfield_10350=_get_date,
     fixVersions=_get_versions,
