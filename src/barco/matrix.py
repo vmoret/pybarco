@@ -4,10 +4,10 @@ from itertools import groupby
 from operator import itemgetter
 
 import pandas as pd
-from IPython.display import display_html
+from IPython.display import display_html, display_svg
 
 
-def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
+def matrix_svg(value_counts, ranges=(3, 5, 10), display=True):
 
     MONTHS = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
               'Oct', 'Nov', 'Dec')
@@ -86,7 +86,7 @@ def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
         weeks = list(reduce(split, days, ([[]], 0))[0])
 
         def reducer(y, x):
-            if len(y):
+            if len(y) > 0:
                 prev = y[-1]
                 if prev[1] == x[1]:
                     return y + [(prev[0] + 1, x[1])]
@@ -98,6 +98,19 @@ def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
         svg = ('<svg width="{width}" height="{height}" ' +
                'class="js-calendar-graph-svg">').format(width=width,
                                                         height=height)
+        svg += '''<style>
+        rect {
+            shape-rendering: crispedges;
+        }
+        text.month {
+            font-size: 10px;
+            fill: #767676;
+        }
+        text.wday {
+            font-size: 9px;
+            fill: #767676;
+        }
+        </style>'''
         svg += '<g transform="translate(16, 20)">'
         for i, week in enumerate(weeks):
             svg += build_svg_week(i, week)
@@ -123,6 +136,13 @@ def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
         svg += '</g>'
         svg += '</svg>'
         return svg
+
+    result = build_svg(value_counts.items())
+
+    return display_svg(result, raw=True) if display else result
+
+
+def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
 
     style = '''
     <style>
@@ -174,17 +194,6 @@ def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
     svg:not(:root) {
         overflow: hidden;
     }
-    rect {
-        shape-rendering: crispedges;
-    }
-    .calendar-graph text.month {
-        font-size: 10px;
-        fill: #767676;
-    }
-    .calendar-graph text.wday {
-        font-size: 9px;
-        fill: #767676;
-    }
     </style>'''
     html = '''
     <div class="border">
@@ -206,5 +215,6 @@ def matrix_chart(value_counts, title, ranges=(3, 5, 10)):
         </div>
     </div>'''
     return display_html(
-        style + html.format(title=title, svg=build_svg(value_counts.items())),
+        style + html.format(
+            title=title, svg=matrix_svg(value_counts, ranges), display=False),
         raw=True)
